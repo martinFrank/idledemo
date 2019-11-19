@@ -35,4 +35,8 @@ public class ResourceManager {
         }
         throw new MalformedURLException("url=null");
     }
+
+    public URL getImage() throws MalformedURLException {
+        return resourceURL("image/terrain_atlas.png");
+    }
 }

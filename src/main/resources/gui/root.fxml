@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.121"
-            fx:controller="com.github.martinfrank.idledemo.gui.RootController">
-    <!--    <fx:include source="menu.fxml" />-->
-    <!--    <HBox spacing="10">-->
-    <!--        <padding>-->
-    <!--            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />-->
-    <!--        </padding>-->
-    <!--        <ScrollPane hbarPolicy="NEVER" prefViewportHeight="672" prefViewportWidth="528" vbarPolicy="NEVER">-->
-    <!--            <GameMapCanvas fx:id="mapCanvas" />-->
-    <!--        </ScrollPane>-->
-    <!--        <VBox>-->
-    <!--            <fx:include source="cardstack.fxml" />-->
-    <!--            <TextArea fx:id="console" VBox.vgrow="ALWAYS" />-->
-    <!--            <fx:include source="playerdeck.fxml" />-->
-    <!--        </VBox>-->
-    <!--    </HBox>-->
-</BorderPane>
+<?import javafx.scene.layout.HBox?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
+      fx:controller="com.github.martinfrank.idledemo.gui.RootController">
+   <Canvas fx:id="leftImage" pickOnBounds="true" BorderPane.alignment="TOP_LEFT" width="128" height="128"/>
+   <Canvas fx:id="centerImage" BorderPane.alignment="TOP_LEFT" width="128" height="128"/>
+</HBox>
