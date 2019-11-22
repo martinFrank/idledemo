@@ -34,6 +34,7 @@ public class App extends Application {
         fxmlLoader.setControllerFactory(controllerFactory);
         HBox root = fxmlLoader.load();
         RootController rootController = fxmlLoader.getController();
+//        rootController.setTilesetManager(tilesetManager);
         rootController.setImageManager(imageManager);
 
         //all das muss in den View
@@ -44,7 +45,7 @@ public class App extends Application {
         //model
 
         Scene scene = new Scene(root, 350, 250);
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Test");
         primaryStage.setScene(scene);
         primaryStage.show();
 

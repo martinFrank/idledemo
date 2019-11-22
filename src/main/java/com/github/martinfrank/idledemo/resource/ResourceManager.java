@@ -1,5 +1,7 @@
 package com.github.martinfrank.idledemo.resource;
 
+import com.github.martinfrank.idledemo.image.ImageDescription;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,7 +38,10 @@ public class ResourceManager {
         throw new MalformedURLException("url=null");
     }
 
-    public URL getImage() throws MalformedURLException {
-        return resourceURL("image/terrain_atlas.png");
+    public URL getImage(ImageDescription name) throws MalformedURLException {
+        if (name == ImageDescription.TERRAIN) {
+            return resourceURL("image/terrain_atlas.png");
+        }
+        return null;
     }
 }

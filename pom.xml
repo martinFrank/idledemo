@@ -88,6 +88,21 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.martinfrank</groupId>
+            <artifactId>geolib</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.martinfrank</groupId>
+            <artifactId>gridinventory</artifactId>
+            <version>0.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.martinfrank</groupId>
+            <artifactId>idlelib</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

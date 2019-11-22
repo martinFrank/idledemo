@@ -1,5 +1,6 @@
 package com.github.martinfrank.idledemo.image;
 
+import com.github.martinfrank.geolib.GeoPoint;
 import com.github.martinfrank.idledemo.resource.ResourceManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -14,49 +15,68 @@ import java.util.Map;
 public class ImageManager {
 
     private final ResourceManager resourceManager;
-    private Map<ImageIdentifier, Image[]> images = new HashMap<>();
+    private Map<ImageDescription, Image[]> images = new HashMap<>();
 
     public ImageManager(ResourceManager resourceManager) throws IOException {
         this.resourceManager = resourceManager;
-        splitImages();
+        loadTileset(ImageDescription.TERRAIN);
     }
 
-    public Image getImage(ImageIdentifier terrain, int index) {
-        return images.get(terrain)[index];
+    public Image getImage(ImageDescription tileset, int index) {
+        return images.get(tileset)[index];
     }
 
-    public void splitImages() throws IOException {
-        splitImages(ImageIdentifier.TERRAIN, 32, 32, 32, 32);
-    }
-
-    private void splitImages(ImageIdentifier identifier, int amountColumns, int amountRows, int tileWidth, int tileHeight) throws IOException {
-        Image[] images = new Image[amountColumns * amountRows];
-        Image srcImage = new Image(resourceManager.getImage().openStream());
+    private void loadTileset(ImageDescription tileset) throws IOException {
+        Image[] images = new Image[tileset.getColumns() * tileset.getRows()];
+        Image srcImage = new Image(resourceManager.getImage(tileset).openStream());
         PixelReader pixelReader = srcImage.getPixelReader();
-        PixelWriter pixelWriter = null;
+        PixelWriter pixelWriter;
         int index = 0;
 
-        for (int dy = 0; dy < amountRows; dy++) {
-            for (int dx = 0; dx < amountColumns; dx++) {
-                WritableImage wImg = new WritableImage(tileWidth, tileHeight);
-                pixelWriter = wImg.getPixelWriter();
-                int yOffset = dy * tileHeight;
-                for (int y = 0; y < tileHeight; y++) {
-                    int xOffset = (dx * tileWidth);
-                    for (int x = 0; x < tileWidth; x++) {
+        for (int dy = 0; dy < tileset.getRows(); dy++) {
+            for (int dx = 0; dx < tileset.getColumns(); dx++) {
+                WritableImage subImage = new WritableImage(tileset.getTileWidth(), tileset.getTileHeight());
+                pixelWriter = subImage.getPixelWriter();
+                int yOffset = dy * tileset.getTileHeight();
+                for (int y = 0; y < tileset.getTileHeight(); y++) {
+                    int xOffset = (dx * tileset.getTileWidth());
+                    for (int x = 0; x < tileset.getTileWidth(); x++) {
                         Color color = pixelReader.getColor(x + xOffset, y + yOffset);
                         pixelWriter.setColor(x, y, color);
                     }
                 }
-                images[index] = wImg;
+                images[index] = subImage;
                 index = index + 1;
             }
         }
-        this.images.put(identifier, images);
+        this.images.put(tileset, images);
     }
 
+    public Image createComposite(Map<GeoPoint, Image> composite) {//FIXME create datatype for that
+        Image partImage = composite.values().iterator().next();
+        int partImageWidth = (int) partImage.getWidth();
+        int partImageHeight = (int) partImage.getHeight();
 
-    public enum ImageIdentifier {
-        TERRAIN
+        int compositeWidth = composite.keySet().stream().mapToInt(GeoPoint::getX).max().orElse(0);
+        compositeWidth = (compositeWidth + 1) * partImageWidth;
+        int compositeHeight = composite.keySet().stream().mapToInt(GeoPoint::getY).max().orElse(0);
+        compositeHeight = (compositeHeight + 1) * partImageHeight;
+
+        WritableImage compositeImage = new WritableImage(compositeWidth, compositeHeight);
+        PixelWriter pixelWriter = compositeImage.getPixelWriter();
+        for (Map.Entry<GeoPoint, Image> entry : composite.entrySet()) {
+            GeoPoint point = entry.getKey();
+            Image entryImage = entry.getValue();
+            PixelReader pixelReader = entryImage.getPixelReader();
+            for (int dy = 0; dy < partImageHeight; dy++) {
+                for (int dx = 0; dx < partImageWidth; dx++) {
+                    int xOnComposite = point.getX() * partImageWidth + dx;
+                    int yOnComposite = point.getY() * partImageHeight + dy;
+                    Color color = pixelReader.getColor(dx, dy);
+                    pixelWriter.setColor(xOnComposite, yOnComposite, color);
+                }
+            }
+        }
+        return compositeImage;
     }
 }
