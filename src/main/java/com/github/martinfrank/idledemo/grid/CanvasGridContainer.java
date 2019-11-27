@@ -1,7 +1,5 @@
 package com.github.martinfrank.idledemo.grid;
 
-import com.github.martinfrank.geolib.GeoPoint;
-import com.github.martinfrank.gridinventory.GridShape;
 import com.github.martinfrank.gridinventory.RectangleContainer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
@@ -10,14 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
-public class CanvasGridContainer extends RectangleContainer<CanvasGridItem> {
+public class CanvasGridContainer<R> extends RectangleContainer<R> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CanvasGridContainer.class);
-    private final Canvas canvas;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateContainer.class);
+    public final Canvas canvas;
 
-    private final GridSize gridSize;
+    public final GridSize gridSize;
 
     public CanvasGridContainer(GridSize gridSize, Canvas canvas) {
+
         super(gridSize.getRows(), gridSize.getColumns());
         this.canvas = canvas;
         this.gridSize = gridSize;
@@ -40,10 +39,5 @@ public class CanvasGridContainer extends RectangleContainer<CanvasGridItem> {
         canvas.getGraphicsContext2D().stroke();
     }
 
-    @Override
-    public void add(GridShape<CanvasGridItem> shape, GeoPoint location) {
-        super.add(shape, location);
-        shape.getItem().draw(location.getX() * gridSize.getGridWidth(), location.getY() * gridSize.getGidHeight(), canvas);
-    }
 
 }
