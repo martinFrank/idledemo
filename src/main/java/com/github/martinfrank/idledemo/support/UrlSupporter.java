@@ -1,4 +1,4 @@
-package com.github.martinfrank.idledemo.resource;
+package com.github.martinfrank.idledemo.support;
 
 import com.github.martinfrank.idledemo.image.ImageDescription;
 
@@ -6,26 +6,26 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ResourceManager {
+public class UrlSupporter {
 
     private final ClassLoader classLoader;
 
-    public ResourceManager(ClassLoader classLoader) {
+    public UrlSupporter(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
     public URL getGuiRoot() throws MalformedURLException {
         return resourceURL("gui/root.fxml");
     }
-//
+
 //    public URL getImagesRoot() throws MalformedURLException {
 //        return resourceURL("images/images.xml");
 //    }
-//
+
 //    public URL getResourceURL (String src) throws MalformedURLException {
 //        return resourceURL(src);
 //    }
-//
+
 //    public URL getGuiSetupDialog() throws MalformedURLException {
 //        return resourceURL("gui/setupdialog.fxml");
 //    }

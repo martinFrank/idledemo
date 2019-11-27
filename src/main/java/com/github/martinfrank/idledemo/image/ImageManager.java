@@ -1,7 +1,7 @@
 package com.github.martinfrank.idledemo.image;
 
 import com.github.martinfrank.geolib.GeoPoint;
-import com.github.martinfrank.idledemo.resource.ResourceManager;
+import com.github.martinfrank.idledemo.support.UrlSupporter;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -14,11 +14,11 @@ import java.util.Map;
 
 public class ImageManager {
 
-    private final ResourceManager resourceManager;
+    private final UrlSupporter urlSupporter;
     private Map<ImageDescription, Image[]> images = new HashMap<>();
 
-    public ImageManager(ResourceManager resourceManager) throws IOException {
-        this.resourceManager = resourceManager;
+    public ImageManager(UrlSupporter urlSupporter) throws IOException {
+        this.urlSupporter = urlSupporter;
         loadTileset(ImageDescription.TERRAIN);
     }
 
@@ -28,7 +28,7 @@ public class ImageManager {
 
     private void loadTileset(ImageDescription tileset) throws IOException {
         Image[] images = new Image[tileset.getColumns() * tileset.getRows()];
-        Image srcImage = new Image(resourceManager.getImage(tileset).openStream());
+        Image srcImage = new Image(urlSupporter.getImage(tileset).openStream());
         PixelReader pixelReader = srcImage.getPixelReader();
         PixelWriter pixelWriter;
         int index = 0;

@@ -5,9 +5,9 @@ import com.github.martinfrank.gridinventory.BasicGridShape;
 
 import java.util.List;
 
-public class CanvasGridShape extends BasicGridShape<CanvasGridItem> {
+public class TemplateShape extends BasicGridShape<GeneratorTemplate> {
 
-    public CanvasGridShape(List<GeoPoint> shape) {
+    public TemplateShape(List<GeoPoint> shape) {
         super(shape);
     }
 }
