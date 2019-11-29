@@ -1,5 +1,6 @@
 package com.github.martinfrank.idledemo.idle;
 
+import com.github.martinfrank.idledemo.idle.generator.GeneratorFactory;
 import com.github.martinfrank.idlelib.GeneratorListener;
 import com.github.martinfrank.idlelib.Timer;
 

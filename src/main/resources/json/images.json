@@ -1,0 +1,156 @@
+{
+  "imageDefinitions": [
+    {
+      "imageName": "blankField_3x2",
+      "tileset": "TERRAIN",
+      "subImage": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "imageId": 549
+        },
+        {
+          "location": {
+            "x": 1,
+            "y": 0
+          },
+          "imageId": 550
+        },
+        {
+          "location": {
+            "x": 2,
+            "y": 0
+          },
+          "imageId": 551
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 1
+          },
+          "imageId": 613
+        },
+        {
+          "location": {
+            "x": 1,
+            "y": 1
+          },
+          "imageId": 614
+        },
+        {
+          "location": {
+            "x": 2,
+            "y": 1
+          },
+          "imageId": 615
+        }
+      ]
+    },
+    {
+      "imageName": "tomato_4x2_1_of_4",
+      "tileset": "TERRAIN",
+      "subImage": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "imageId": 549
+        },
+        {
+          "location": {
+            "x": 1,
+            "y": 0
+          },
+          "imageId": 550
+        },
+        {
+          "location": {
+            "x": 2,
+            "y": 0
+          },
+          "imageId": 550
+        },
+        {
+          "location": {
+            "x": 3,
+            "y": 0
+          },
+          "imageId": 551
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 1
+          },
+          "imageId": 613
+        },
+        {
+          "location": {
+            "x": 1,
+            "y": 1
+          },
+          "imageId": 614
+        },
+        {
+          "location": {
+            "x": 2,
+            "y": 1
+          },
+          "imageId": 614
+        },
+        {
+          "location": {
+            "x": 3,
+            "y": 1
+          },
+          "imageId": 615
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 1
+          },
+          "imageId": 779
+        },
+        {
+          "location": {
+            "x": 1,
+            "y": 1
+          },
+          "imageId": 811
+        },
+        {
+          "location": {
+            "x": 2,
+            "y": 0
+          },
+          "imageId": 843
+        },
+        {
+          "location": {
+            "x": 2,
+            "y": 1
+          },
+          "imageId": 875
+        },
+        {
+          "location": {
+            "x": 3,
+            "y": 0
+          },
+          "imageId": 907
+        },
+        {
+          "location": {
+            "x": 3,
+            "y": 1
+          },
+          "imageId": 939
+        }
+      ]
+    }
+  ]
+}

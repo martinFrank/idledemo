@@ -1,6 +1,6 @@
-package com.github.martinfrank.idledemo.grid;
+package com.github.martinfrank.idledemo.idle.template;
 
-import com.github.martinfrank.idledemo.idle.GeneratorFactory;
+import com.github.martinfrank.idledemo.idle.generator.GeneratorFactory;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 

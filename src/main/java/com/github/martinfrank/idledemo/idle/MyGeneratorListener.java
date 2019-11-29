@@ -13,6 +13,5 @@ public class MyGeneratorListener implements GeneratorListener {
     @Override
     public void notifyYield(Generator generator) {
         LOGGER.debug("i'm ready to yield... ");
-        generator.yield();
     }
 }

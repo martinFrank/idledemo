@@ -3,6 +3,9 @@ package com.github.martinfrank.idledemo;
 import com.github.martinfrank.idledemo.gui.ControllerFactory;
 import com.github.martinfrank.idledemo.gui.RootController;
 import com.github.martinfrank.idledemo.idle.IdleManager;
+import com.github.martinfrank.idledemo.idle.generator.GeneratorFactoryManager;
+import com.github.martinfrank.idledemo.idle.template.TemplateFactory;
+import com.github.martinfrank.idledemo.image.ImageDefinitionManager;
 import com.github.martinfrank.idledemo.image.ImageManager;
 import com.github.martinfrank.idledemo.support.UrlSupporter;
 import javafx.application.Application;
@@ -28,15 +31,18 @@ public class App extends Application {
     private IdleManager idleManager;
     private RootController rootController;
     private boolean isRunning = true;
+    private static final int UPDATE_UI_INTERVAL = 200;
 
     @Override
     public void stop() throws Exception {
         LOGGER.debug("stop");
-        isRunning = false;
-        if (idleManager != null) {
-            idleManager.stop();
-        }
+        stopAnimationThread();
+        idleManager.stop();
         super.stop();
+    }
+
+    private void stopAnimationThread() {
+        isRunning = false;
     }
 
     @Override
@@ -44,65 +50,41 @@ public class App extends Application {
         LOGGER.debug("start");
 
         idleManager = new IdleManager();
-
         UrlSupporter urlSupporter = new UrlSupporter(getClass().getClassLoader());
         ImageManager imageManager = new ImageManager(urlSupporter);
+        ImageDefinitionManager imageDefinitionManager = new ImageDefinitionManager(urlSupporter);
+        GeneratorFactoryManager generatorFactoryManager = new GeneratorFactoryManager(urlSupporter);
+        TemplateFactory templateFactory = new TemplateFactory(imageManager, imageDefinitionManager, generatorFactoryManager);
 
         ControllerFactory controllerFactory = new ControllerFactory();
         FXMLLoader fxmlLoader = new FXMLLoader(urlSupporter.getGuiRoot());
         fxmlLoader.setControllerFactory(controllerFactory);
         HBox root = fxmlLoader.load();
         rootController = fxmlLoader.getController();
-//        rootController.setTilesetManager(tilesetManager);
-        rootController.setImageManager(imageManager);
+        rootController.setTemplateFactory(templateFactory);
         rootController.setIdleManager(idleManager);
+        rootController.init();
 
-
-        //all das muss in den View
-        //view selbst muss ein Listener sein, der am Model listened (uiChangedEvent o.ä.)
-        //view selbst supported den Control, weil hier die z.B. mouseListener (Controller) angehängt werden
-        //update UI erfolgt via control oder model
-
-        //model
-
-        Scene scene = new Scene(root, 350, 250);
+        Scene scene = new Scene(root);
         primaryStage.setTitle("Test");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        rootController.init();
-
         startAnimationThread();
-
-
     }
 
     private void startAnimationThread() {
-
-        new Thread() {
-
-            {
-                setDaemon(true);
-            }
-
-            @Override
-            public void run() {
-                try {
-                    while (isRunning) {
-                        TimeUnit.SECONDS.sleep(1);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                rootController.doIt();
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        Thread thread = new Thread(() -> {
+            try {
+                while (isRunning) {
+                    TimeUnit.MILLISECONDS.sleep(UPDATE_UI_INTERVAL);
+                    Platform.runLater(() -> rootController.updateUI());
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }.start();
-
-
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 }

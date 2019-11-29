@@ -2,11 +2,12 @@ package com.github.martinfrank.idledemo.gui;
 
 import com.github.martinfrank.geolib.GeoPoint;
 import com.github.martinfrank.idledemo.grid.*;
-import com.github.martinfrank.idledemo.idle.GeneratorFactory;
 import com.github.martinfrank.idledemo.idle.IdleManager;
-import com.github.martinfrank.idledemo.idle.TimberGenerator;
-import com.github.martinfrank.idledemo.image.ImageDescription;
-import com.github.martinfrank.idledemo.image.ImageManager;
+import com.github.martinfrank.idledemo.idle.ResourceType;
+import com.github.martinfrank.idledemo.idle.generator.BasicGenerator;
+import com.github.martinfrank.idledemo.idle.generator.GeneratorFactory;
+import com.github.martinfrank.idledemo.idle.template.GeneratorTemplate;
+import com.github.martinfrank.idledemo.idle.template.TemplateFactory;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
@@ -14,67 +15,83 @@ import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Random;
 
 
 public class RootController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RootController.class);
+
     public Canvas leftCanvas;
     public Canvas centerCanvas;
 
-    private ImageManager imageManager;
+    private TemplateFactory templateFactory;
     private TemplateContainer leftContainer;
     private GeneratorContainer centerContainer;
     private IdleManager idleManager;
-
-    public RootController() {
-        LOGGER.debug("<constructor>");
-    }
+    private GridSize leftGridSize;
+    private GridSize centerGridSize;
 
     private Random random = new Random();
 
-    public void setImageManager(ImageManager imageManager) {
-        this.imageManager = imageManager;
-    }
-
     private static GeoPoint getGeoPoint(MouseEvent event, GridSize gridSize) {
-        return new GeoPoint((int) event.getX() / gridSize.getGridWidth(), (int) event.getY() / gridSize.getGidHeight());
+        return new GeoPoint((int) event.getX() / gridSize.getGridWidth(), (int) event.getY() / gridSize.getGridHeight());
     }
 
     private static GeoPoint getGeoPoint(DragEvent event, GridSize gridSize) {
-        return new GeoPoint((int) event.getX() / gridSize.getGridWidth(), (int) event.getY() / gridSize.getGidHeight());
+        return new GeoPoint((int) event.getX() / gridSize.getGridWidth(), (int) event.getY() / gridSize.getGridHeight());
     }
 
-    public void init() throws IOException {
+    public void setTemplateFactory(TemplateFactory templateFactory) {
+        this.templateFactory = templateFactory;
+    }
+
+    public void init() {
         LOGGER.debug("init");
+        leftGridSize = new GridSize(4, 4, 32, 32);
+        centerGridSize = new GridSize(4, 9, 32, 32);
 
-        GridSize gridSize = new GridSize(4, 4, 32, 32);
+        leftContainer = new TemplateContainer(leftGridSize, leftCanvas);
+        centerContainer = new GeneratorContainer(centerGridSize, centerCanvas);
 
-        leftContainer = new TemplateContainer(gridSize, leftCanvas);
+        createDragFromLeftToCenter();
+        createGeneratorClickListener();
+    }
 
-        centerContainer = new GeneratorContainer(gridSize, centerCanvas);
+    private void createGeneratorClickListener() {
+        centerCanvas.setOnMouseClicked(mouseEvent -> {
+            BasicGenerator pickedItem = centerContainer.getItemAt(getGeoPoint(mouseEvent, centerGridSize));
+            if (pickedItem != null && pickedItem.getProgress().isComplete()) {
+                Map<ResourceType, Double> amount = pickedItem.yield();
+                for (Map.Entry<ResourceType, Double> entry : amount.entrySet()) {
+                    LOGGER.debug("earned {} of {} from generator {}", entry.getValue(), entry.getKey(), pickedItem);
+                }
+            } else {
+                LOGGER.debug("generator {} is not yet ready", pickedItem);
+            }
+        });
+    }
 
-        Map<GeoPoint, Image> composite = new HashMap<>();
-        composite.put(new GeoPoint(0, 0), imageManager.getImage(ImageDescription.TERRAIN, 32));
-        composite.put(new GeoPoint(1, 0), imageManager.getImage(ImageDescription.TERRAIN, 34));
-        List<GeoPoint> shape = Arrays.asList(new GeoPoint(0, 0), new GeoPoint(1, 0));
-        TemplateShape templateShape = new TemplateShape(new ArrayList<>(composite.keySet()));
-        final Image compositeImage = imageManager.createComposite(composite);
-        templateShape.setItem(new GeneratorTemplate(compositeImage));
-
-        leftContainer.add(templateShape, new GeoPoint(1, 2));
+    private void createDragFromLeftToCenter() {
+        //fixme - kommt in SetupTemplates
+        TemplateShape templateShape = templateFactory.createTemplate();
+        Image compositeImage = templateShape.getItem().getImage();
+        leftContainer.add(templateShape, new GeoPoint(0, 0));
 
         leftCanvas.setOnDragDetected(mouseEvent -> {
-            GeneratorTemplate pickedItem = leftContainer.getItemAt(getGeoPoint(mouseEvent, gridSize));
+            GeneratorTemplate pickedItem = leftContainer.getItemAt(getGeoPoint(mouseEvent, leftGridSize));
 
             if (pickedItem != null) {
                 Dragboard db = leftCanvas.startDragAndDrop(TransferMode.MOVE);
                 ClipboardContent content = new ClipboardContent();
                 content.putString(pickedItem.getTemplateId().name());
                 db.setContent(content);
-                db.setDragView(pickedItem.getImage());
+                Image image = pickedItem.getImage();
+                double x = image.getWidth() / 2d - leftGridSize.getGridWidth() / 2d;
+                double y = -1 * image.getHeight() / 2d + leftGridSize.getGridHeight() / 2d;
+                db.setDragView(pickedItem.getImage(), x, y);
             }
             mouseEvent.consume();
         });
@@ -90,21 +107,19 @@ public class RootController {
 //        });
 
         centerCanvas.setOnDragDropped(dragEvent -> {
-            GeoPoint at = getGeoPoint(dragEvent, gridSize);
+            GeoPoint at = getGeoPoint(dragEvent, leftGridSize);
             LOGGER.debug("drop event!!!");
             Dragboard db = dragEvent.getDragboard();
-            //Get an item ID here, which was stored when the drag started.
+
             boolean success = true;
             // If this is a meaningful drop...
             if (db.hasString()) {
-                String nodeId = db.getString();
                 GeneratorFactory.GeneratorId id = GeneratorFactory.GeneratorId.valueOf(db.getString());
-                TimberGenerator generator = idleManager.getFactory().generate(id, compositeImage);
-                GeneratorShape generatorShape = new GeneratorShape(new ArrayList<>(composite.keySet()));
+                BasicGenerator generator = idleManager.getFactory().generate(id, compositeImage);
+                GeneratorShape generatorShape = new GeneratorShape(new ArrayList<>(templateShape.getShape()));
                 generatorShape.setItem(generator);
 
                 if (centerContainer.fitsInside(generatorShape, at)) {
-                    //FIXME should be a command!
                     centerContainer.add(generatorShape, at);
                     LOGGER.debug("successfully add (new) generator {} at {}", id, at);
                 } else {
@@ -116,17 +131,19 @@ public class RootController {
             dragEvent.setDropCompleted(success);
             dragEvent.consume();
         });
-
     }
 
     public void setIdleManager(IdleManager idleManager) {
         this.idleManager = idleManager;
     }
 
-    public void doIt() {
+    public void updateUI() {
         if (leftCanvas.isVisible()) {
             leftCanvas.getGraphicsContext2D().setFill(new Color(random.nextDouble(), random.nextDouble(), random.nextDouble(), 1));
             leftCanvas.getGraphicsContext2D().fillRect(0, 0, 20, 20);
+        }
+        if (centerContainer.isVisible()) {
+            centerContainer.updateUI();
         }
     }
 }

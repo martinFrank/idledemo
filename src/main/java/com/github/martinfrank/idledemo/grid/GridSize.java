@@ -5,13 +5,13 @@ public class GridSize {
     private final int rows;
     private final int columns;
     private final int gridWidth;
-    private final int gidHeight;
+    private final int gridHeight;
 
     public GridSize(int rows, int columns, int gridWidth, int gidHeight) {
         this.rows = rows;
         this.columns = columns;
         this.gridWidth = gridWidth;
-        this.gidHeight = gidHeight;
+        this.gridHeight = gidHeight;
     }
 
     public int getRows() {
@@ -26,8 +26,8 @@ public class GridSize {
         return gridWidth;
     }
 
-    public int getGidHeight() {
-        return gidHeight;
+    public int getGridHeight() {
+        return gridHeight;
     }
 
 }

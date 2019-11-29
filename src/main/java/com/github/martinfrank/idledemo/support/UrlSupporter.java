@@ -18,6 +18,13 @@ public class UrlSupporter {
         return resourceURL("gui/root.fxml");
     }
 
+    public URL getImageDescription() throws MalformedURLException {
+        return resourceURL("json/images.json");
+    }
+
+    public URL getFactoryDescription() throws MalformedURLException {
+        return resourceURL("json/generators.json");
+    }
 //    public URL getImagesRoot() throws MalformedURLException {
 //        return resourceURL("images/images.xml");
 //    }
@@ -44,4 +51,6 @@ public class UrlSupporter {
         }
         return null;
     }
+
+
 }
