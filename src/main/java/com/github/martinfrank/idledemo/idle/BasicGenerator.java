@@ -1,6 +1,5 @@
-package com.github.martinfrank.idledemo.idle.generator;
+package com.github.martinfrank.idledemo.idle;
 
-import com.github.martinfrank.idledemo.idle.ResourceType;
 import com.github.martinfrank.idlelib.Generator;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

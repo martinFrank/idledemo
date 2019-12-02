@@ -2,12 +2,7 @@ package com.github.martinfrank.idledemo.gui;
 
 import com.github.martinfrank.geolib.GeoPoint;
 import com.github.martinfrank.idledemo.grid.*;
-import com.github.martinfrank.idledemo.idle.IdleManager;
-import com.github.martinfrank.idledemo.idle.ResourceType;
-import com.github.martinfrank.idledemo.idle.generator.BasicGenerator;
-import com.github.martinfrank.idledemo.idle.generator.GeneratorFactory;
-import com.github.martinfrank.idledemo.idle.template.GeneratorTemplate;
-import com.github.martinfrank.idledemo.idle.template.TemplateFactory;
+import com.github.martinfrank.idledemo.idle.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
@@ -81,7 +76,7 @@ public class RootController {
         leftContainer.add(templateShape, new GeoPoint(0, 0));
 
         leftCanvas.setOnDragDetected(mouseEvent -> {
-            GeneratorTemplate pickedItem = leftContainer.getItemAt(getGeoPoint(mouseEvent, leftGridSize));
+            Template pickedItem = leftContainer.getItemAt(getGeoPoint(mouseEvent, leftGridSize));
 
             if (pickedItem != null) {
                 Dragboard db = leftCanvas.startDragAndDrop(TransferMode.MOVE);
@@ -114,7 +109,7 @@ public class RootController {
             boolean success = true;
             // If this is a meaningful drop...
             if (db.hasString()) {
-                GeneratorFactory.GeneratorId id = GeneratorFactory.GeneratorId.valueOf(db.getString());
+                Template.TemplateId id = Template.TemplateId.valueOf(db.getString());
                 BasicGenerator generator = idleManager.getFactory().generate(id, compositeImage);
                 GeneratorShape generatorShape = new GeneratorShape(new ArrayList<>(templateShape.getShape()));
                 generatorShape.setItem(generator);

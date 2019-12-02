@@ -1,4 +1,4 @@
-package com.github.martinfrank.idledemo.image;
+package com.github.martinfrank.idledemo.image.json;
 
 import com.github.martinfrank.geolib.GeoPoint;
 

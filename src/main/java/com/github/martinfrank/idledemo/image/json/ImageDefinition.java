@@ -1,4 +1,6 @@
-package com.github.martinfrank.idledemo.image;
+package com.github.martinfrank.idledemo.image.json;
+
+import com.github.martinfrank.idledemo.image.TilesetImageDescription;
 
 public class ImageDefinition {
 
@@ -41,7 +43,7 @@ public class ImageDefinition {
         return imageMapping;
     }
 
-    public ImageDescription getImageDescription() {
-        return ImageDescription.valueOf(tileset);
+    public TilesetImageDescription getImageDescription() {
+        return TilesetImageDescription.valueOf(tileset);
     }
 }

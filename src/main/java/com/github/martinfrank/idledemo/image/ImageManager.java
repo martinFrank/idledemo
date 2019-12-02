@@ -1,7 +1,9 @@
 package com.github.martinfrank.idledemo.image;
 
 import com.github.martinfrank.geolib.GeoPoint;
-import com.github.martinfrank.idledemo.support.UrlSupporter;
+import com.github.martinfrank.idledemo.image.json.ImageDefinition;
+import com.github.martinfrank.idledemo.image.json.ImageMapping;
+import com.github.martinfrank.idledemo.support.UrlProvider;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -14,16 +16,16 @@ import java.util.Map;
 
 public class ImageManager {
 
-    private final UrlSupporter urlSupporter;
-    private final Map<ImageDescription, Image[]> images = new HashMap<>();
+    private final UrlProvider urlProvider;
+    private final Map<TilesetImageDescription, Image[]> images = new HashMap<>();
     private final Map<String, Image> imageDefinitions = new HashMap<>();
 
-    public ImageManager(UrlSupporter urlSupporter) throws IOException {
-        this.urlSupporter = urlSupporter;
-        loadTileset(ImageDescription.TERRAIN);
+    public ImageManager(UrlProvider urlProvider) throws IOException {
+        this.urlProvider = urlProvider;
+        loadTileset(TilesetImageDescription.TERRAIN);
     }
 
-    public Image getImage(ImageDescription tileset, int index) {
+    public Image getImage(TilesetImageDescription tileset, int index) {
         return images.get(tileset)[index];
     }
 
@@ -31,9 +33,9 @@ public class ImageManager {
         return imageDefinitions.computeIfAbsent(definition.getImageName(), k -> createComposite(definition));
     }
 
-    private void loadTileset(ImageDescription tileset) throws IOException {
+    private void loadTileset(TilesetImageDescription tileset) throws IOException {
         Image[] images = new Image[tileset.getColumns() * tileset.getRows()];
-        Image srcImage = new Image(urlSupporter.getImage(tileset).openStream());
+        Image srcImage = new Image(urlProvider.getTilesetImage(tileset).openStream());
         PixelReader pixelReader = srcImage.getPixelReader();
         PixelWriter pixelWriter;
         int index = 0;
@@ -86,7 +88,7 @@ public class ImageManager {
 //    }
 
     public Image createComposite(ImageDefinition imageDefinition) {
-        ImageDescription tileset = imageDefinition.getImageDescription();
+        TilesetImageDescription tileset = imageDefinition.getImageDescription();
 
         int partImageWidth = tileset.getTileWidth();
         int partImageHeight = tileset.getTileHeight();

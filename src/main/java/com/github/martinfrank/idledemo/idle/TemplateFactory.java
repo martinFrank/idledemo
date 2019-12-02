@@ -1,9 +1,8 @@
-package com.github.martinfrank.idledemo.idle.template;
+package com.github.martinfrank.idledemo.idle;
 
 import com.github.martinfrank.geolib.GeoPoint;
 import com.github.martinfrank.idledemo.grid.TemplateShape;
-import com.github.martinfrank.idledemo.idle.generator.GeneratorDefinition;
-import com.github.martinfrank.idledemo.idle.generator.GeneratorFactoryManager;
+import com.github.martinfrank.idledemo.idle.json.GeneratorDefinition;
 import com.github.martinfrank.idledemo.image.ImageDefinitionManager;
 import com.github.martinfrank.idledemo.image.ImageManager;
 import javafx.scene.image.Image;
@@ -30,7 +29,7 @@ public class TemplateFactory {
         final Image compositeImage = imageManager.createComposite(
                 imageDefinitionManager.getImageDefinition("tomato_4x2_1_of_4"));
         System.out.println("compositeImage:" + compositeImage.getHeight() + "/" + compositeImage.getHeight());
-        templateShape.setItem(new GeneratorTemplate(compositeImage));
+        templateShape.setItem(new Template(compositeImage));
         return templateShape;
     }
 }

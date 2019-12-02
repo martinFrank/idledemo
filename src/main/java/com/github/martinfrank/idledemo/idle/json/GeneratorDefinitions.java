@@ -1,4 +1,4 @@
-package com.github.martinfrank.idledemo.idle.generator;
+package com.github.martinfrank.idledemo.idle.json;
 
 import java.util.Arrays;
 

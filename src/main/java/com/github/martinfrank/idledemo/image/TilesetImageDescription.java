@@ -1,6 +1,6 @@
 package com.github.martinfrank.idledemo.image;
 
-public enum ImageDescription {
+public enum TilesetImageDescription {
 
     TERRAIN(32, 32, 32, 32);
 
@@ -9,7 +9,7 @@ public enum ImageDescription {
     private final int tileWidth;
     private final int tileHeight;
 
-    ImageDescription(int columns, int rows, int tileWidth, int tileHeight) {
+    TilesetImageDescription(int columns, int rows, int tileWidth, int tileHeight) {
         this.columns = columns;
         this.rows = rows;
         this.tileWidth = tileWidth;

@@ -1,16 +1,16 @@
 package com.github.martinfrank.idledemo.support;
 
-import com.github.martinfrank.idledemo.image.ImageDescription;
+import com.github.martinfrank.idledemo.image.TilesetImageDescription;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class UrlSupporter {
+public class UrlProvider {
 
     private final ClassLoader classLoader;
 
-    public UrlSupporter(ClassLoader classLoader) {
+    public UrlProvider(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
@@ -45,8 +45,8 @@ public class UrlSupporter {
         throw new MalformedURLException("url=null");
     }
 
-    public URL getImage(ImageDescription name) throws MalformedURLException {
-        if (name == ImageDescription.TERRAIN) {
+    public URL getTilesetImage(TilesetImageDescription name) throws MalformedURLException {
+        if (name == TilesetImageDescription.TERRAIN) {
             return resourceURL("image/terrain_atlas.png");
         }
         return null;

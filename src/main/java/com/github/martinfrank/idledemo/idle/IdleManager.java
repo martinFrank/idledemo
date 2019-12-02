@@ -1,10 +1,14 @@
 package com.github.martinfrank.idledemo.idle;
 
-import com.github.martinfrank.idledemo.idle.generator.GeneratorFactory;
+import com.github.martinfrank.idlelib.Generator;
 import com.github.martinfrank.idlelib.GeneratorListener;
 import com.github.martinfrank.idlelib.Timer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IdleManager {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IdleManager.class);
 
     private final GeneratorFactory factory;
     private final GeneratorListener listener;
@@ -12,7 +16,7 @@ public class IdleManager {
 
     public IdleManager() {
         timer = new Timer();
-        listener = new MyGeneratorListener();
+        listener = new IdleManagerGeneratorListener();
         factory = new GeneratorFactory(timer, listener);
     }
 
@@ -29,8 +33,14 @@ public class IdleManager {
     }
 
     public void stop() {
-        if (timer != null) {
-            timer.stop();
+        timer.stop();
+    }
+
+    public static class IdleManagerGeneratorListener implements GeneratorListener {
+
+        @Override
+        public void notifyYield(Generator generator) {
+            LOGGER.debug("i'm ready to yield... ");
         }
     }
 }

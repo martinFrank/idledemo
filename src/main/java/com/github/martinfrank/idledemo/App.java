@@ -2,12 +2,12 @@ package com.github.martinfrank.idledemo;
 
 import com.github.martinfrank.idledemo.gui.ControllerFactory;
 import com.github.martinfrank.idledemo.gui.RootController;
+import com.github.martinfrank.idledemo.idle.GeneratorFactoryManager;
 import com.github.martinfrank.idledemo.idle.IdleManager;
-import com.github.martinfrank.idledemo.idle.generator.GeneratorFactoryManager;
-import com.github.martinfrank.idledemo.idle.template.TemplateFactory;
+import com.github.martinfrank.idledemo.idle.TemplateFactory;
 import com.github.martinfrank.idledemo.image.ImageDefinitionManager;
 import com.github.martinfrank.idledemo.image.ImageManager;
-import com.github.martinfrank.idledemo.support.UrlSupporter;
+import com.github.martinfrank.idledemo.support.UrlProvider;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -50,14 +50,14 @@ public class App extends Application {
         LOGGER.debug("start");
 
         idleManager = new IdleManager();
-        UrlSupporter urlSupporter = new UrlSupporter(getClass().getClassLoader());
-        ImageManager imageManager = new ImageManager(urlSupporter);
-        ImageDefinitionManager imageDefinitionManager = new ImageDefinitionManager(urlSupporter);
-        GeneratorFactoryManager generatorFactoryManager = new GeneratorFactoryManager(urlSupporter);
+        UrlProvider urlProvider = new UrlProvider(getClass().getClassLoader());
+        ImageManager imageManager = new ImageManager(urlProvider);
+        ImageDefinitionManager imageDefinitionManager = new ImageDefinitionManager(urlProvider);
+        GeneratorFactoryManager generatorFactoryManager = new GeneratorFactoryManager(urlProvider);
         TemplateFactory templateFactory = new TemplateFactory(imageManager, imageDefinitionManager, generatorFactoryManager);
 
         ControllerFactory controllerFactory = new ControllerFactory();
-        FXMLLoader fxmlLoader = new FXMLLoader(urlSupporter.getGuiRoot());
+        FXMLLoader fxmlLoader = new FXMLLoader(urlProvider.getGuiRoot());
         fxmlLoader.setControllerFactory(controllerFactory);
         HBox root = fxmlLoader.load();
         rootController = fxmlLoader.getController();

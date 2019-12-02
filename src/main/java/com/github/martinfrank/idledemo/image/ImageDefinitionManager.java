@@ -1,7 +1,9 @@
 package com.github.martinfrank.idledemo.image;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.martinfrank.idledemo.support.UrlSupporter;
+import com.github.martinfrank.idledemo.image.json.ImageDefinition;
+import com.github.martinfrank.idledemo.image.json.ImageDefinitions;
+import com.github.martinfrank.idledemo.support.UrlProvider;
 
 import java.io.IOException;
 import java.net.URL;
@@ -10,8 +12,8 @@ public class ImageDefinitionManager {
 
     private ImageDefinitions images;
 
-    public ImageDefinitionManager(UrlSupporter urlSupporter) throws IOException {
-        loadImageDefinitions(urlSupporter.getImageDescription());
+    public ImageDefinitionManager(UrlProvider urlProvider) throws IOException {
+        loadImageDefinitions(urlProvider.getImageDescription());
     }
 
     private void loadImageDefinitions(URL url) throws IOException {
