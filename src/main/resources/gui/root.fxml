@@ -2,10 +2,13 @@
 
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<HBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      fx:controller="com.github.martinfrank.idledemo.gui.RootController">
-    <Canvas fx:id="leftCanvas" pickOnBounds="true" BorderPane.alignment="TOP_LEFT" width="128" height="128"/>
-    <Canvas fx:id="centerCanvas" BorderPane.alignment="TOP_LEFT" width="128" height="128"/>
-</HBox>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal"
+           fx:controller="com.github.martinfrank.idledemo.gui.RootController">
+    <Canvas fx:id="animationLayer" mouseTransparent="true" BorderPane.alignment="TOP_LEFT"/>
+    <!--    <Canvas fx:id="animationLayer" BorderPane.alignment="TOP_LEFT"/>-->
+    <HBox>
+        <Canvas fx:id="leftCanvas" pickOnBounds="true" BorderPane.alignment="TOP_LEFT"/>
+        <Canvas fx:id="centerCanvas" BorderPane.alignment="TOP_LEFT"/>
+    </HBox>
+</StackPane>

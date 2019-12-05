@@ -21,6 +21,7 @@ public class RootController {
 
     public Canvas leftCanvas;
     public Canvas centerCanvas;
+    public Canvas animationLayer;
 
     private TemplateFactory templateFactory;
     private TemplateContainer leftContainer;
@@ -51,8 +52,15 @@ public class RootController {
         leftContainer = new TemplateContainer(leftGridSize, leftCanvas);
         centerContainer = new GeneratorContainer(centerGridSize, centerCanvas);
 
+        setupAnimationLayer();
         createDragFromLeftToCenter();
         createGeneratorClickListener();
+    }
+
+    private void setupAnimationLayer() {
+        animationLayer.setWidth(animationLayer.getParent().prefWidth(0));
+        animationLayer.setHeight(animationLayer.getParent().prefHeight(0));
+        animationLayer.toFront();
     }
 
     private void createGeneratorClickListener() {
@@ -70,10 +78,11 @@ public class RootController {
     }
 
     private void createDragFromLeftToCenter() {
-        //fixme - kommt in SetupTemplates
+        //FIXME - kommt in SetupTemplates
         TemplateShape templateShape = templateFactory.createTemplate();
         Image compositeImage = templateShape.getItem().getImage();
         leftContainer.add(templateShape, new GeoPoint(0, 0));
+        //End of FIXME
 
         leftCanvas.setOnDragDetected(mouseEvent -> {
             Template pickedItem = leftContainer.getItemAt(getGeoPoint(mouseEvent, leftGridSize));
@@ -133,9 +142,9 @@ public class RootController {
     }
 
     public void updateUI() {
-        if (leftCanvas.isVisible()) {
-            leftCanvas.getGraphicsContext2D().setFill(new Color(random.nextDouble(), random.nextDouble(), random.nextDouble(), 1));
-            leftCanvas.getGraphicsContext2D().fillRect(0, 0, 20, 20);
+        if (animationLayer.isVisible()) {
+            animationLayer.getGraphicsContext2D().setFill(new Color(random.nextDouble(), random.nextDouble(), random.nextDouble(), 1));
+            animationLayer.getGraphicsContext2D().fillRect(0, 0, 20, 20);
         }
         if (centerContainer.isVisible()) {
             centerContainer.updateUI();

@@ -12,7 +12,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class App extends Application {
         ControllerFactory controllerFactory = new ControllerFactory();
         FXMLLoader fxmlLoader = new FXMLLoader(urlProvider.getGuiRoot());
         fxmlLoader.setControllerFactory(controllerFactory);
-        HBox root = fxmlLoader.load();
+        StackPane root = fxmlLoader.load();
         rootController = fxmlLoader.getController();
         rootController.setTemplateFactory(templateFactory);
         rootController.setIdleManager(idleManager);
