@@ -14,16 +14,16 @@ public class TemplateFactory {
 
     private final ImageManager imageManager;
     private final ImageDefinitionManager imageDefinitionManager;
-    private final GeneratorFactoryManager generatorFactoryManager;
+    private final GeneratorFactory generatorFactory;
 
-    public TemplateFactory(ImageManager imageManager, ImageDefinitionManager imageDefinitionManager, GeneratorFactoryManager generatorFactoryManager) {
+    public TemplateFactory(ImageManager imageManager, ImageDefinitionManager imageDefinitionManager, GeneratorFactory generatorFactory) {
         this.imageManager = imageManager;
         this.imageDefinitionManager = imageDefinitionManager;
-        this.generatorFactoryManager = generatorFactoryManager;
+        this.generatorFactory = generatorFactory;
     }
 
     public TemplateShape createTemplate() {
-        GeneratorDefinition generatorDefinition = generatorFactoryManager.getGeneratorDefinition("gen_test");
+        GeneratorDefinition generatorDefinition = generatorFactory.getGeneratorDefinition("gen_test");
         List<GeoPoint> shape = Arrays.asList(generatorDefinition.getShape());
         TemplateShape templateShape = new TemplateShape(shape);
         final Image compositeImage = imageManager.createComposite(

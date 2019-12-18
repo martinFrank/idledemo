@@ -2,7 +2,6 @@ package com.github.martinfrank.idledemo;
 
 import com.github.martinfrank.idledemo.gui.ControllerFactory;
 import com.github.martinfrank.idledemo.gui.RootController;
-import com.github.martinfrank.idledemo.idle.GeneratorFactoryManager;
 import com.github.martinfrank.idledemo.idle.IdleManager;
 import com.github.martinfrank.idledemo.idle.TemplateFactory;
 import com.github.martinfrank.idledemo.image.ImageDefinitionManager;
@@ -49,12 +48,12 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         LOGGER.debug("start");
 
-        idleManager = new IdleManager();
         UrlProvider urlProvider = new UrlProvider(getClass().getClassLoader());
+        idleManager = new IdleManager(urlProvider);
         ImageManager imageManager = new ImageManager(urlProvider);
         ImageDefinitionManager imageDefinitionManager = new ImageDefinitionManager(urlProvider);
-        GeneratorFactoryManager generatorFactoryManager = new GeneratorFactoryManager(urlProvider);
-        TemplateFactory templateFactory = new TemplateFactory(imageManager, imageDefinitionManager, generatorFactoryManager);
+        TemplateFactory templateFactory =
+                new TemplateFactory(imageManager, imageDefinitionManager, idleManager.getFactory());
 
         ControllerFactory controllerFactory = new ControllerFactory();
         FXMLLoader fxmlLoader = new FXMLLoader(urlProvider.getGuiRoot());

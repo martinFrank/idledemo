@@ -157,7 +157,8 @@
                     <artifactId>javafx-maven-plugin</artifactId>
                     <version>0.0.3</version>
                     <configuration>
-                        <mainClass>com.github.martinfrank.idledemo.App</mainClass>
+                        <!--                        <mainClass>com.github.martinfrank.idledemo.App</mainClass>-->
+                        <mainClass>com.github.martinfrank.idledemo.CellFactories</mainClass>
                     </configuration>
                 </plugin>
             </plugins>
